@@ -1,0 +1,36 @@
+{
+  "city": "Phoenix",
+  "coordinates": {
+    "lat": 33.4484,
+    "lon": -112.074
+  },
+  "weather": {
+    "temperature_c": 15.1,
+    "feels_like_c": 14.5,
+    "humidity_percent": 68,
+    "pressure_hpa": 978,
+    "wind_speed_kph": 2.2,
+    "wind_direction_deg": 60,
+    "visibility_km": 10,
+    "uv_index": 4,
+    "dew_point_c": 0,
+    "cloud_cover_percent": 1,
+    "precipitation_mm": 0,
+    "snowfall_cm": 0,
+    "condition": "Clear sky",
+    "alerts": [],
+    "sun": {
+      "sunrise": "2025-11-25T07:09",
+      "sunset": "2025-11-25T17:21"
+    }
+  },
+  "hazard_prediction": {
+    "city": "Phoenix",
+    "fire_risk_percent": 10,
+    "flood_risk_percent": 5,
+    "storm_risk_percent": 5,
+    "heat_wave_risk_percent": 0,
+    "snow_risk_percent": 0,
+    "explanation": ""
+  }
+}

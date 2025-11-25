@@ -1,0 +1,36 @@
+{
+  "city": "Phoenix",
+  "coordinates": {
+    "lat": 33.4484,
+    "lon": -112.074
+  },
+  "weather": {
+    "temperature_c": 10.1,
+    "feels_like_c": 9.1,
+    "humidity_percent": 95,
+    "pressure_hpa": 980,
+    "wind_speed_kph": 5.4,
+    "wind_direction_deg": 127,
+    "visibility_km": 10,
+    "uv_index": 4,
+    "dew_point_c": 0,
+    "cloud_cover_percent": 2,
+    "precipitation_mm": 0,
+    "snowfall_cm": 0,
+    "condition": "Clear sky",
+    "alerts": [],
+    "sun": {
+      "sunrise": "2025-11-24T07:08",
+      "sunset": "2025-11-24T17:21"
+    }
+  },
+  "hazard_prediction": {
+    "city": "Phoenix",
+    "fire_risk_percent": 5,
+    "flood_risk_percent": 5,
+    "storm_risk_percent": 5,
+    "heat_wave_risk_percent": 5,
+    "snow_risk_percent": 0,
+    "explanation": "Azure OpenAI not configured or failed. Returning mock data."
+  }
+}

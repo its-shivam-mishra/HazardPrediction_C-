@@ -1,0 +1,36 @@
+{
+  "city": "Philadelphia",
+  "coordinates": {
+    "lat": 39.9526,
+    "lon": -75.1652
+  },
+  "weather": {
+    "temperature_c": 7,
+    "feels_like_c": 3.6,
+    "humidity_percent": 72,
+    "pressure_hpa": 1019,
+    "wind_speed_kph": 11.4,
+    "wind_direction_deg": 294,
+    "visibility_km": 10,
+    "uv_index": 2,
+    "dew_point_c": 0,
+    "cloud_cover_percent": 7,
+    "precipitation_mm": 0,
+    "snowfall_cm": 0,
+    "condition": "Clear sky",
+    "alerts": [],
+    "sun": {
+      "sunrise": "2025-11-24T06:56",
+      "sunset": "2025-11-24T16:38"
+    }
+  },
+  "hazard_prediction": {
+    "city": "Philadelphia",
+    "fire_risk_percent": 5,
+    "flood_risk_percent": 5,
+    "storm_risk_percent": 5,
+    "heat_wave_risk_percent": 5,
+    "snow_risk_percent": 0,
+    "explanation": "Azure OpenAI not configured or failed. Returning mock data."
+  }
+}
