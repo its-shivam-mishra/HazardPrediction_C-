@@ -53,5 +53,8 @@ steps:
     azureSubscription: 'PayYouGo(01cfc6ee-b2aa-463b-98e6-99d09998413b)'
     appType: 'webApp'
     WebAppName: 'HazardPrediction'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    deployToSlotOrASE: true
+    ResourceGroupName: 'Hazard_Prediction_Group'
+    SlotName: 'production'
+    packageForLinux: '$(System.ArtifactsDirectory)/HazardPredictionArtifact/WebApp.zip'
 
