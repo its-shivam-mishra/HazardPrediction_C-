@@ -5,12 +5,12 @@
     "lon": -74.006
   },
   "weather": {
-    "temperature_c": 6.7,
-    "feels_like_c": 3.3,
+    "temperature_c": 8.1,
+    "feels_like_c": 4.9,
     "humidity_percent": 68,
     "pressure_hpa": 1020,
-    "wind_speed_kph": 9.8,
-    "wind_direction_deg": 196,
+    "wind_speed_kph": 10.7,
+    "wind_direction_deg": 190,
     "visibility_km": 10,
     "uv_index": 1,
     "dew_point_c": 0,
@@ -26,11 +26,11 @@
   },
   "hazard_prediction": {
     "city": "New York",
-    "fire_risk_percent": 5,
-    "flood_risk_percent": 5,
-    "storm_risk_percent": 10,
-    "heat_wave_risk_percent": 0,
-    "snow_risk_percent": 2,
+    "fire_risk_percent": 2,
+    "flood_risk_percent": 2,
+    "storm_risk_percent": 5,
+    "heat_wave_risk_percent": 1,
+    "snow_risk_percent": 1,
     "explanation": ""
   }
 }

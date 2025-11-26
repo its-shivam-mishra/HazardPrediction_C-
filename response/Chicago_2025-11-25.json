@@ -5,17 +5,17 @@
     "lon": -87.6298
   },
   "weather": {
-    "temperature_c": 8.3,
-    "feels_like_c": 6.9,
-    "humidity_percent": 96,
+    "temperature_c": 8.4,
+    "feels_like_c": 7,
+    "humidity_percent": 95,
     "pressure_hpa": 980,
-    "wind_speed_kph": 5.4,
-    "wind_direction_deg": 177,
+    "wind_speed_kph": 5.3,
+    "wind_direction_deg": 206,
     "visibility_km": 10,
-    "uv_index": 1,
+    "uv_index": 0,
     "dew_point_c": 0,
     "cloud_cover_percent": 100,
-    "precipitation_mm": 0.23,
+    "precipitation_mm": 0.08,
     "snowfall_cm": 0,
     "condition": "Overcast",
     "alerts": [],
@@ -26,11 +26,11 @@
   },
   "hazard_prediction": {
     "city": "Chicago",
-    "fire_risk_percent": 2,
+    "fire_risk_percent": 1,
     "flood_risk_percent": 10,
-    "storm_risk_percent": 15,
+    "storm_risk_percent": 20,
     "heat_wave_risk_percent": 0,
-    "snow_risk_percent": 0,
+    "snow_risk_percent": 5,
     "explanation": ""
   }
 }
