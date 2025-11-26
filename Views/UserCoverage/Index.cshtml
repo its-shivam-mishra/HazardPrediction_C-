@@ -1,0 +1,89 @@
+@model WeatherHazardApi.Models.NotificationViewModel
+
+@{
+    ViewData["Title"] = "Targeted Hazard Notifications";
+}
+
+<div class="container mt-4">
+    <h2>Targeted Hazard Notifications</h2>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Message"]
+        </div>
+    }
+
+    <form asp-action="SendNotifications" method="post">
+        <div class="card mb-4">
+            <div class="card-header">
+                At Risk Users
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Select</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Missing Coverage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Users.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="checkbox" asp-for="Users[i].IsSelected" />
+                                    <input type="hidden" asp-for="Users[i].Id" />
+                                    <input type="hidden" asp-for="Users[i].Name" />
+                                    <input type="hidden" asp-for="Users[i].Email" />
+                                    <input type="hidden" asp-for="Users[i].MissingCoverage" />
+                                </td>
+                                <td>@Model.Users[i].Name</td>
+                                <td>@Model.Users[i].Email</td>
+                                <td><span class="text-danger">@Model.Users[i].MissingCoverage</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                Email Content
+            </div>
+            <div class="card-body">
+                <div class="form-group mb-3">
+                    <label asp-for="EmailSubject" class="form-label">Subject</label>
+                    <input asp-for="EmailSubject" class="form-control" />
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="EmailBodyHtml" class="form-label">Body</label>
+                    <input type="hidden" asp-for="EmailBodyHtml" id="EmailBodyHtml" />
+                    <div id="editor-container" style="height: 200px;">
+                        @Html.Raw(Model.EmailBodyHtml)
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Approve & Send Notifications</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+    <script>
+        var quill = new Quill('#editor-container', {
+            theme: 'snow'
+        });
+
+        document.querySelector('form').onsubmit = function () {
+            var html = document.querySelector('.ql-editor').innerHTML;
+            document.querySelector('#EmailBodyHtml').value = html;
+        };
+    </script>
+}

@@ -138,32 +138,7 @@ namespace WeatherHazardApi.Models
         [JsonPropertyName("sun")]
         public SunInfo Sun { get; set; } = new();
         
-        // Helper to hold daily forecast if needed, though the requirement asks for "Next N days" 
-        // but the example output shows a single object. 
-        // The requirement says "For each city, fetch: Next N days of weather"
-        // BUT the example output structure shows a SINGLE "weather" object.
-        // I will assume the example output is for "current" or "today", OR I should include a list of forecasts.
-        // Re-reading: "Output JSON MUST follow this structure: ... weather: { ... }"
-        // It looks like a single day snapshot in the example. 
-        // However, "Fetch Next N days" implies a list.
-        // I will add a `Forecast` property to be safe, or maybe the `weather` object is just the current/summary.
-        // Let's stick to the example structure for the main object, and maybe add a `Forecasts` list if needed.
-        // Actually, looking at the example, it has specific fields like `sunrise`, `sunset`.
-        // I will strictly follow the example for the main structure, but I will add a `DailyForecasts` list 
-        // to actually satisfy "Next N days of weather" requirement if the user wants to see them.
-        // But to be strictly compliant with "Output JSON MUST follow this structure", I will match it exactly.
-        // Maybe the "weather" object represents the *current* or *summary*?
-        // I'll add a `Forecasts` list as an extra field, or just map the first day to the `weather` object.
-        // Given the ambiguity, I'll map the current/today weather to the `weather` object as shown in the example,
-        // and perhaps add a `forecast` array if it doesn't break the "MUST follow" rule.
-        // The prompt says "Output JSON MUST follow this structure". I will stick to that structure.
-        // If "Next N days" are fetched, maybe they are just used to determine hazards?
-        // Or maybe the structure provided is just for one day and I should return a list of these?
-        // "For each city, fetch... Output JSON MUST follow this structure".
-        // It's likely a list of these objects, or one object per city?
-        // "Create one file per city". So the file contains ONE JSON object like the example.
-        // So the "weather" object probably represents the summary or the first day.
-        // I will stick to the example structure.
+       
     }
 
     public class SunInfo
