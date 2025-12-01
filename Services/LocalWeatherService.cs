@@ -31,8 +31,8 @@ namespace WeatherHazardApi.Services
                 if (!string.IsNullOrEmpty(databaseId) && !string.IsNullOrEmpty(containerId))
                 {
                     var container = _cosmosClient.GetContainer(databaseId, containerId);
-                    // Filter out already sent notifications
-                    var query = new QueryDefinition("SELECT * FROM c WHERE c.city = @city AND (c.isNotificationSent = false OR NOT IS_DEFINED(c.isNotificationSent)) ORDER BY c._ts DESC OFFSET 0 LIMIT 1")
+                    // Filter out already sent notifications and ensure it's a weather record
+                    var query = new QueryDefinition("SELECT * FROM c WHERE c.city = @city AND (c.Type = 'Weather' OR NOT IS_DEFINED(c.Type)) AND (c.isNotificationSent = false OR NOT IS_DEFINED(c.isNotificationSent)) ORDER BY c._ts DESC OFFSET 0 LIMIT 1")
                         .WithParameter("@city", city);
 
                     using var iterator = container.GetItemQueryIterator<UnifiedWeatherResponse>(query);
@@ -62,11 +62,51 @@ namespace WeatherHazardApi.Services
                 _logger.LogError(ex, "Error fetching hazards from Cosmos DB for {City}. Falling back to local files.", city);
             }
 
-            
+
 
             return (hazards, predictionId);
 
 
+        }
+
+        public async Task<List<UnifiedWeatherResponse>> GetActiveHazardsAsync()
+        {
+            var activeHazards = new List<UnifiedWeatherResponse>();
+            try
+            {
+                var databaseId = _configuration["Cosmos:DatabaseId"];
+                var containerId = _configuration["Cosmos:ContainerId"];
+
+                if (!string.IsNullOrEmpty(databaseId) && !string.IsNullOrEmpty(containerId))
+                {
+                    var container = _cosmosClient.GetContainer(databaseId, containerId);
+                    // Fetch all unsent weather records
+                    // Note: We fetch all because we need to group by city client-side to find the latest
+                    var query = new QueryDefinition("SELECT * FROM c WHERE (c.Type = 'Weather' OR NOT IS_DEFINED(c.Type)) AND (c.isNotificationSent = false OR NOT IS_DEFINED(c.isNotificationSent))");
+
+                    using var iterator = container.GetItemQueryIterator<UnifiedWeatherResponse>(query);
+                    var allResults = new List<UnifiedWeatherResponse>();
+
+                    while (iterator.HasMoreResults)
+                    {
+                        var response = await iterator.ReadNextAsync();
+                        allResults.AddRange(response);
+                    }
+
+                    // Group by City and take the latest one
+                    activeHazards = allResults
+                        .GroupBy(w => w.City)
+                        .Select(g => g.OrderByDescending(w => w.PredictionGeneratedDate).FirstOrDefault())
+                        .Where(w => w != null)
+                        .ToList()!;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching active hazards from Cosmos DB.");
+            }
+
+            return activeHazards;
         }
     }
 }

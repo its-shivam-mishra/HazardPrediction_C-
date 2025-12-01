@@ -1,4 +1,4 @@
-@model List<WeatherHazardApi.Models.UnifiedWeatherResponse>
+@model IEnumerable<WeatherHazardApi.Models.NotificationLog>
 
 @{
     ViewData["Title"] = "Sent Notification History";
@@ -16,11 +16,11 @@
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th><i class="fas fa-city me-1"></i>City</th>
-                                <th><i class="fas fa-biohazard me-1"></i>Hazards</th>
-                                <th><i class="fas fa-info-circle me-1"></i>Explanation</th>
-                                <th><i class="far fa-calendar-alt me-1"></i>Prediction Date</th>
                                 <th><i class="far fa-paper-plane me-1"></i>Sent Date</th>
+                                <th><i class="fas fa-heading me-1"></i>Subject</th>
+                                <th><i class="fas fa-users me-1"></i>No of Users</th>
+                                <th><i class="fas fa-biohazard me-1"></i>Coverages</th>
+                                <th><i class="fas fa-city me-1"></i>City</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -28,41 +28,39 @@
                             @foreach (var item in Model)
                             {
                                 <tr>
-                                    <td class="fw-bold">@item.City</td>
+                                    <td>@item.SentDate.ToLocalTime().ToString("g")</td>
+                                    <td>@item.EmailSubject</td>
                                     <td>
-                                        @if (item.HazardPrediction != null)
+                                        <span class="badge bg-secondary">@item.UserIds.Count</span>
+                                    </td>
+                                    <td>
+                                        @foreach (var coverage in item.CoverageIds)
                                         {
-                                            var hazards = new List<string>();
-                                            if (item.HazardPrediction.FireRiskPercent > 0) 
-                                            {
-                                                <span class="badge bg-danger me-1"><i class="fas fa-fire me-1"></i>Fire (@item.HazardPrediction.FireRiskPercent %)</span>
-                                            }
-                                            if (item.HazardPrediction.FloodRiskPercent > 0) 
-                                            {
-                                                <span class="badge bg-primary me-1"><i class="fas fa-water me-1"></i>Flood (@item.HazardPrediction.FloodRiskPercent %)</span>
-                                            }
-                                            if (item.HazardPrediction.StormRiskPercent > 0) 
-                                            {
-                                                <span class="badge bg-dark me-1"><i class="fas fa-poo-storm me-1"></i>Storm (@item.HazardPrediction.StormRiskPercent %)</span>
-                                            }
-                                            if (item.HazardPrediction.HeatWaveRiskPercent > 0) 
-                                            {
-                                                <span class="badge bg-warning text-dark me-1"><i class="fas fa-sun me-1"></i>Heat (@item.HazardPrediction.HeatWaveRiskPercent %)</span>
-                                            }
-                                            if (item.HazardPrediction.SnowRiskPercent > 0) 
-                                            {
-                                                <span class="badge bg-info text-dark me-1"><i class="fas fa-snowflake me-1"></i>Snow (@item.HazardPrediction.SnowRiskPercent %)</span>
-                                            }
+                                            <span class="badge bg-warning text-dark me-1">@coverage</span>
                                         }
                                     </td>
-                                    <td class="small text-muted">@item.HazardPrediction?.Explanation</td>
-                                    <td class="small">@item.PredictionGeneratedDate.ToLocalTime().ToString("g")</td>
-                                    <td class="small">@item.NotificationSentDate?.ToLocalTime().ToString("g")</td>
+                                    <td class="fw-bold">
+                                        @if (item.Cities != null && item.Cities.Any())
+                                        {
+                                            if (item.Cities.Count > 1)
+                                            {
+                                                <span title="@string.Join(", ", item.Cities)">Multiple (@item.Cities.Count)</span>
+                                            }
+                                            else
+                                            {
+                                                @item.Cities.First()
+                                            }
+                                        }
+                                        else
+                                        {
+                                            @item.City
+                                        }
+                                    </td>
                                     <td>
-                                        <form asp-action="ResendNotification" method="post">
+                                        <form asp-action="ResendNotification" method="post" class="d-inline">
                                             <input type="hidden" name="id" value="@item.Id" />
                                             <input type="hidden" name="city" value="@item.City" />
-                                            <button type="submit" class="btn btn-warning btn-sm">
+                                            <button type="submit" class="btn btn-sm btn-outline-primary">
                                                 <i class="fas fa-redo me-1"></i>Resend
                                             </button>
                                         </form>

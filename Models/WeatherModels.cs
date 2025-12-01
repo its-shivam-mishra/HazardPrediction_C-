@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace WeatherHazardApi.Models
 {
@@ -69,98 +70,124 @@ namespace WeatherHazardApi.Models
     public class UnifiedWeatherResponse
     {
         [JsonPropertyName("id")]
-        [Newtonsoft.Json.JsonProperty("id")]
+        [JsonProperty("id")]
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
         [JsonPropertyName("city")]
-        [Newtonsoft.Json.JsonProperty("city")]
+        [JsonProperty("city")]
         public string City { get; set; } = string.Empty;
 
         [JsonPropertyName("coordinates")]
+        [JsonProperty("coordinates")]
         public Coordinates Coordinates { get; set; } = new();
 
         [JsonPropertyName("weather")]
+        [JsonProperty("weather")]
         public WeatherDetails Weather { get; set; } = new();
 
         [JsonPropertyName("hazard_prediction")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public HazardPrediction? HazardPrediction { get; set; }
 
         [JsonPropertyName("isNotificationSent")]
+        [JsonProperty("isNotificationSent")]
         public bool IsNotificationSent { get; set; }
 
         [JsonPropertyName("notificationSentDate")]
+        [JsonProperty("notificationSentDate")]
         public DateTime? NotificationSentDate { get; set; }
 
         [JsonPropertyName("predictionGeneratedDate")]
+        [JsonProperty("predictionGeneratedDate")]
         public DateTime PredictionGeneratedDate { get; set; } = DateTime.UtcNow;
+
+        [JsonPropertyName("Type")]
+        [JsonProperty("Type")]
+        public string Type { get; set; } = "Weather";
     }
 
     public class Coordinates
     {
         [JsonPropertyName("lat")]
+        [JsonProperty("lat")]
         public double Lat { get; set; }
 
         [JsonPropertyName("lon")]
+        [JsonProperty("lon")]
         public double Lon { get; set; }
     }
 
     public class WeatherDetails
     {
         [JsonPropertyName("temperature_c")]
+        [JsonProperty("temperature_c")]
         public double TemperatureC { get; set; }
 
         [JsonPropertyName("feels_like_c")]
+        [JsonProperty("feels_like_c")]
         public double FeelsLikeC { get; set; }
 
         [JsonPropertyName("humidity_percent")]
+        [JsonProperty("humidity_percent")]
         public int HumidityPercent { get; set; }
 
         [JsonPropertyName("pressure_hpa")]
+        [JsonProperty("pressure_hpa")]
         public int PressureHpa { get; set; }
 
         [JsonPropertyName("wind_speed_kph")]
+        [JsonProperty("wind_speed_kph")]
         public double WindSpeedKph { get; set; }
 
         [JsonPropertyName("wind_direction_deg")]
+        [JsonProperty("wind_direction_deg")]
         public int WindDirectionDeg { get; set; }
 
         [JsonPropertyName("visibility_km")]
+        [JsonProperty("visibility_km")]
         public double VisibilityKm { get; set; }
 
         [JsonPropertyName("uv_index")]
+        [JsonProperty("uv_index")]
         public int UvIndex { get; set; }
 
         [JsonPropertyName("dew_point_c")]
+        [JsonProperty("dew_point_c")]
         public double DewPointC { get; set; }
 
         [JsonPropertyName("cloud_cover_percent")]
+        [JsonProperty("cloud_cover_percent")]
         public int CloudCoverPercent { get; set; }
 
         [JsonPropertyName("precipitation_mm")]
+        [JsonProperty("precipitation_mm")]
         public double PrecipitationMm { get; set; }
 
         [JsonPropertyName("snowfall_cm")]
+        [JsonProperty("snowfall_cm")]
         public double SnowfallCm { get; set; }
 
         [JsonPropertyName("condition")]
+        [JsonProperty("condition")]
         public string Condition { get; set; } = string.Empty;
 
         [JsonPropertyName("alerts")]
+        [JsonProperty("alerts")]
         public List<string> Alerts { get; set; } = new();
 
         [JsonPropertyName("sun")]
+        [JsonProperty("sun")]
         public SunInfo Sun { get; set; } = new();
-
-
     }
 
     public class SunInfo
     {
         [JsonPropertyName("sunrise")]
+        [JsonProperty("sunrise")]
         public string Sunrise { get; set; } = string.Empty;
 
         [JsonPropertyName("sunset")]
+        [JsonProperty("sunset")]
         public string Sunset { get; set; } = string.Empty;
     }
 
