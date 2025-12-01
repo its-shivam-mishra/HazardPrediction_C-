@@ -81,10 +81,19 @@ namespace WeatherHazardApi.Models
 
         [JsonPropertyName("weather")]
         public WeatherDetails Weather { get; set; } = new();
-        
+
         [JsonPropertyName("hazard_prediction")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public HazardPrediction? HazardPrediction { get; set; }
+
+        [JsonPropertyName("isNotificationSent")]
+        public bool IsNotificationSent { get; set; }
+
+        [JsonPropertyName("notificationSentDate")]
+        public DateTime? NotificationSentDate { get; set; }
+
+        [JsonPropertyName("predictionGeneratedDate")]
+        public DateTime PredictionGeneratedDate { get; set; } = DateTime.UtcNow;
     }
 
     public class Coordinates
@@ -142,8 +151,8 @@ namespace WeatherHazardApi.Models
 
         [JsonPropertyName("sun")]
         public SunInfo Sun { get; set; } = new();
-        
-       
+
+
     }
 
     public class SunInfo

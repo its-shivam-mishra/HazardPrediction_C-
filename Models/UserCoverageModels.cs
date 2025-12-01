@@ -25,6 +25,8 @@ namespace WeatherHazardApi.Models
         public string Email { get; set; } = string.Empty;
         public string MissingCoverage { get; set; } = string.Empty;
         public bool IsSelected { get; set; } = true;
+        public string PredictionId { get; set; } = string.Empty;
+        public string City { get; set; } = string.Empty;
     }
 
     public class NotificationViewModel

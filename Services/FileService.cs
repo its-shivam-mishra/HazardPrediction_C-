@@ -1,7 +1,6 @@
 using System.Text.Json;
-using WeatherHazardApi.Models;
-
 using Microsoft.Azure.Cosmos;
+using WeatherHazardApi.Models;
 
 namespace WeatherHazardApi.Services
 {
@@ -24,23 +23,8 @@ namespace WeatherHazardApi.Services
         {
             try
             {
-                // 1. Save to Local File (Existing Logic)
-                var folderPath = Path.Combine(_env.ContentRootPath, "response");
-                if (!Directory.Exists(folderPath))
-                {
-                    Directory.CreateDirectory(folderPath);
-                }
-
-                // Sanitize city name for filename
-                var safeCityName = string.Join("", weatherData.City.Split(Path.GetInvalidFileNameChars()));
-                var date = DateTime.Now.ToString("yyyy-MM-dd");
-                var fileName = $"{safeCityName}_{date}.json";
-                var filePath = Path.Combine(folderPath, fileName);
-
-                //var json = JsonSerializer.Serialize(weatherData, new JsonSerializerOptions { WriteIndented = true });
-               // await File.WriteAllTextAsync(filePath, json);
-                
-                _logger.LogInformation("Saved weather data locally for {City} to {Path}", weatherData.City, filePath);
+                // 1. Save to Local File (Removed as per requirement)
+                // Logic removed to rely solely on Cosmos DB
 
                 // 2. Save to Cosmos DB
                 // 2. Save to Cosmos DB
@@ -58,7 +42,7 @@ namespace WeatherHazardApi.Services
 
                 // Create Container if not exists
                 // Partition key path should be /city based on our usage: new PartitionKey(weatherData.City)
-               
+
                 Container container = await database.CreateContainerIfNotExistsAsync(containerId, "/city");
 
                 // Ensure Id is set if not already (though we added a default in the model)
@@ -66,7 +50,7 @@ namespace WeatherHazardApi.Services
                 {
                     weatherData.Id = Guid.NewGuid().ToString();
                 }
-                
+
                 await container.UpsertItemAsync(weatherData, new PartitionKey(weatherData.City));
 
                 _logger.LogInformation("Saved weather data to Cosmos DB for {City}", weatherData.City);
@@ -74,7 +58,7 @@ namespace WeatherHazardApi.Services
             }
             catch (CosmosException cosmosEx)
             {
-                 _logger.LogError(cosmosEx, "Cosmos DB Error saving weather data for {City}. Status: {Status}", weatherData.City, cosmosEx.StatusCode);
+                _logger.LogError(cosmosEx, "Cosmos DB Error saving weather data for {City}. Status: {Status}", weatherData.City, cosmosEx.StatusCode);
             }
             catch (Exception ex)
             {

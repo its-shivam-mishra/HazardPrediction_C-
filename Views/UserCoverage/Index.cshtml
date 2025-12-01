@@ -5,68 +5,85 @@
 }
 
 <div class="container mt-4">
-    <h2>Targeted Hazard Notifications</h2>
+    <h2 class="mb-4"><i class="fas fa-tachometer-alt text-primary me-2"></i>Targeted Hazard Notifications</h2>
 
     @if (TempData["Message"] != null)
     {
-        <div class="alert alert-success">
-            @TempData["Message"]
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>@TempData["Message"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
 
     <form asp-action="SendNotifications" method="post">
         <div class="card mb-4">
             <div class="card-header">
-                At Risk Users
+                <i class="fas fa-users-cog me-2"></i>At Risk Users
             </div>
-            <div class="card-body">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Select</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Missing Coverage</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for (int i = 0; i < Model.Users.Count; i++)
-                        {
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
                             <tr>
-                                <td>
-                                    <input type="checkbox" asp-for="Users[i].IsSelected" />
-                                    <input type="hidden" asp-for="Users[i].Id" />
-                                    <input type="hidden" asp-for="Users[i].Name" />
-                                    <input type="hidden" asp-for="Users[i].Email" />
-                                    <input type="hidden" asp-for="Users[i].MissingCoverage" />
-                                </td>
-                                <td>@Model.Users[i].Name</td>
-                                <td>@Model.Users[i].Email</td>
-                                <td><span class="text-danger">@Model.Users[i].MissingCoverage</span></td>
+                                <th style="width: 50px;">Select</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Missing Coverage</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Users.Count; i++)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        <div class="form-check d-flex justify-content-center">
+                                            <input class="form-check-input" type="checkbox" asp-for="Users[i].IsSelected" />
+                                        </div>
+                                        <input type="hidden" asp-for="Users[i].Id" />
+                                        <input type="hidden" asp-for="Users[i].Name" />
+                                        <input type="hidden" asp-for="Users[i].Email" />
+                                        <input type="hidden" asp-for="Users[i].MissingCoverage" />
+                                        <input type="hidden" asp-for="Users[i].PredictionId" />
+                                        <input type="hidden" asp-for="Users[i].City" />
+                                    </td>
+                                    <td><i class="fas fa-user-circle text-secondary me-2"></i>@Model.Users[i].Name</td>
+                                    <td>@Model.Users[i].Email</td>
+                                    <td>
+                                        @foreach(var coverage in Model.Users[i].MissingCoverage.Split(','))
+                                        {
+                                            <span class="badge bg-danger me-1"><i class="fas fa-exclamation-triangle me-1"></i>@coverage.Trim()</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
         <div class="card mb-4">
             <div class="card-header">
-                Email Content
+                <i class="fas fa-envelope-open-text me-2"></i>Email Content
             </div>
             <div class="card-body">
                 <div class="form-group mb-3">
-                    <label asp-for="EmailSubject" class="form-label">Subject</label>
-                    <input asp-for="EmailSubject" class="form-control" />
+                    <label asp-for="EmailSubject" class="form-label fw-bold">Subject</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-heading"></i></span>
+                        <input asp-for="EmailSubject" class="form-control" />
+                    </div>
                 </div>
                 <div class="form-group mb-3">
-                    <label asp-for="EmailBodyHtml" class="form-label">Body</label>
+                    <label asp-for="EmailBodyHtml" class="form-label fw-bold">Body</label>
                     <input type="hidden" asp-for="EmailBodyHtml" id="EmailBodyHtml" />
-                    <div id="editor-container" style="height: 200px;">
+                    <div id="editor-container" style="height: 200px; border-radius: 0 0 8px 8px;">
                         @Html.Raw(Model.EmailBodyHtml)
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Approve & Send Notifications</button>
+                <button type="submit" class="btn btn-primary btn-lg w-100">
+                    <i class="fas fa-paper-plane me-2"></i>Approve & Send Notifications
+                </button>
             </div>
         </div>
     </form>

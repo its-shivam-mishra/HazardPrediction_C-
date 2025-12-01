@@ -22,7 +22,7 @@ namespace WeatherHazardApi.Services
             {
                 if (string.IsNullOrEmpty(user.City)) continue;
 
-                var hazards = await _weatherService.GetHazardsForCityAsync(user.City);
+                var (hazards, predictionId) = await _weatherService.GetHazardsForCityAsync(user.City);
                 var missingCoverages = new List<string>();
 
                 foreach (var hazard in hazards)
@@ -44,7 +44,9 @@ namespace WeatherHazardApi.Services
                         Name = $"{user.FirstName} {user.LastName}",
                         Email = user.Email,
                         MissingCoverage = string.Join(", ", missingCoverages),
-                        IsSelected = true
+                        IsSelected = true,
+                        PredictionId = predictionId,
+                        City = user.City
                     });
                 }
             }
