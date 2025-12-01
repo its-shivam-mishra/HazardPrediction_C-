@@ -63,7 +63,7 @@ namespace WeatherHazardApi.Services
             {
                 var weatherJson = JsonSerializer.Serialize(weatherData);
                 var prompt = $@"
-                                You are a weather hazard expert. Analyze the following weather data for {weatherData.City} and predict the risk percentage (20-100) for various hazards, Include a hazard in the output only if its predicted risk percentage is greater than 20.
+                                You are a weather hazard expert. Analyze the following weather data for {weatherData.City} and predict the risk percentage (0-100) for various hazards, Include a hazard in the output only if its predicted risk percentage is greater than 20.
                                 Return ONLY a valid JSON object with the following structure, no markdown formatting:
                                 {{
                                   ""city"": ""{weatherData.City}"",
