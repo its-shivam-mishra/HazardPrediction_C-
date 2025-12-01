@@ -35,19 +35,7 @@ namespace WeatherHazardApi.Services
             new Coverage { Id = 3, Name = "Fire", Details = "Home Fire Insurance" }
         }
     },
-    new User
-    {
-        Id = 3,
-        FirstName = "Bob",
-        LastName = "Jones",
-        Email = "bob.jones@example.com",
-        City = "Chicago",
-        State = "IL",
-        Coverages = new List<Coverage>
-        {
-            new Coverage { Id = 2, Name = "Vehicle", Details = "Liability Only" }
-        }
-    },
+    
 
     // --------------------------
     // NEW USERS START FROM HERE
@@ -94,20 +82,6 @@ namespace WeatherHazardApi.Services
     },
     new User
     {
-        Id = 7,
-        FirstName = "David",
-        LastName = "Miller",
-        Email = "david.miller@example.com",
-        City = "Philadelphia",
-        State = "PA",
-        Coverages = new List<Coverage>
-        {
-            new Coverage { Id = 7, Name = "Health", Details = "Basic Health" },
-            new Coverage { Id = 8, Name = "Vehicle", Details = "Full Auto Coverage" }
-        }
-    },
-    new User
-    {
         Id = 8,
         FirstName = "Emma",
         LastName = "Wilson",
@@ -132,19 +106,7 @@ namespace WeatherHazardApi.Services
             new Coverage { Id = 10, Name = "Health", Details = "Gold Plan" }
         }
     },
-    new User
-    {
-        Id = 10,
-        FirstName = "Olivia",
-        LastName = "Taylor",
-        Email = "olivia.taylor@example.com",
-        City = "Dallas",
-        State = "TX",
-        Coverages = new List<Coverage>
-        {
-            new Coverage { Id = 11, Name = "Vehicle", Details = "Collision + Liability" }
-        }
-    },
+    
     new User
     {
         Id = 11,
@@ -158,19 +120,7 @@ namespace WeatherHazardApi.Services
             new Coverage { Id = 12, Name = "Fire", Details = "Standard Fire Policy" }
         }
     },
-    new User
-    {
-        Id = 12,
-        FirstName = "Sophia",
-        LastName = "Thomas",
-        Email = "sophia.thomas@example.com",
-        City = "New York",
-        State = "NY",
-        Coverages = new List<Coverage>
-        {
-            new Coverage { Id = 13, Name = "Health", Details = "Platinum Health" }
-        }
-    },
+   
     new User
     {
         Id = 13,
@@ -262,32 +212,8 @@ namespace WeatherHazardApi.Services
             new Coverage { Id = 20, Name = "Vehicle", Details = "SUV Insurance" }
         }
     },
-    new User
-    {
-        Id = 20,
-        FirstName = "Charlotte",
-        LastName = "Clark",
-        Email = "charlotte.clark@example.com",
-        City = "Dallas",
-        State = "TX",
-        Coverages = new List<Coverage>
-        {
-            new Coverage { Id = 21, Name = "Fire", Details = "Fire + Flood" }
-        }
-    },
-    new User
-    {
-        Id = 21,
-        FirstName = "Henry",
-        LastName = "Rodriguez",
-        Email = "henry.rodriguez@example.com",
-        City = "San Jose",
-        State = "CA",
-        Coverages = new List<Coverage>
-        {
-            new Coverage { Id = 22, Name = "Health", Details = "Startup Employee Plan" }
-        }
-    },
+   
+   
     new User
     {
         Id = 22,
@@ -379,19 +305,7 @@ namespace WeatherHazardApi.Services
             new Coverage { Id = 29, Name = "Vehicle", Details = "Van Fleet Insurance" }
         }
     },
-    new User
-    {
-        Id = 29,
-        FirstName = "Logan",
-        LastName = "Wright",
-        Email = "logan.wright@example.com",
-        City = "San Jose",
-        State = "CA",
-        Coverages = new List<Coverage>
-        {
-            new Coverage { Id = 30, Name = "Health", Details = "Tech Employee Plus" }
-        }
-    },
+   
     new User
     {
         Id = 30,

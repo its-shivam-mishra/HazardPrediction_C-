@@ -45,11 +45,11 @@ namespace WeatherHazardApi.Services
                         {
                             predictionId = weatherData.Id; // Capture the ID
                             var prediction = weatherData.HazardPrediction;
-                            if (prediction.FireRiskPercent > 0) hazards.Add("Fire");
-                            if (prediction.FloodRiskPercent > 0) hazards.Add("Flood");
-                            if (prediction.StormRiskPercent > 0) hazards.Add("Storm");
-                            if (prediction.HeatWaveRiskPercent > 0) hazards.Add("Heat Wave");
-                            if (prediction.SnowRiskPercent > 0) hazards.Add("Snow");
+                            if (prediction.FireRiskPercent > 20) hazards.Add("Fire");
+                            if (prediction.FloodRiskPercent > 20) hazards.Add("Flood");
+                            if (prediction.StormRiskPercent > 20) hazards.Add("Storm");
+                            if (prediction.HeatWaveRiskPercent > 20) hazards.Add("Heat Wave");
+                            if (prediction.SnowRiskPercent > 20) hazards.Add("Snow");
 
                             _logger.LogInformation("Fetched hazards for {City} from Cosmos DB", city);
                             return (hazards, predictionId);
