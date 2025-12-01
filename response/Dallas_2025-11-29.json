@@ -1,0 +1,37 @@
+{
+  "id": "ab6b17af-1dc6-4813-8dde-cae09e26cc40",
+  "city": "Dallas",
+  "coordinates": {
+    "lat": 32.7767,
+    "lon": -96.797
+  },
+  "weather": {
+    "temperature_c": 11.1,
+    "feels_like_c": 7.8,
+    "humidity_percent": 77,
+    "pressure_hpa": 1001,
+    "wind_speed_kph": 17.4,
+    "wind_direction_deg": 158,
+    "visibility_km": 10,
+    "uv_index": 1,
+    "dew_point_c": 0,
+    "cloud_cover_percent": 78,
+    "precipitation_mm": 0,
+    "snowfall_cm": 0,
+    "condition": "Partly cloudy",
+    "alerts": [],
+    "sun": {
+      "sunrise": "2025-11-29T07:10",
+      "sunset": "2025-11-29T17:21"
+    }
+  },
+  "hazard_prediction": {
+    "city": "Dallas",
+    "fire_risk_percent": 5,
+    "flood_risk_percent": 5,
+    "storm_risk_percent": 10,
+    "heat_wave_risk_percent": 0,
+    "snow_risk_percent": 0,
+    "explanation": ""
+  }
+}

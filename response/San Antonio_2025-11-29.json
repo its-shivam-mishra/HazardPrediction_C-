@@ -1,0 +1,37 @@
+{
+  "id": "5706987c-ea17-40e6-b045-94d1dd5f5e0c",
+  "city": "San Antonio",
+  "coordinates": {
+    "lat": 29.4241,
+    "lon": -98.4936
+  },
+  "weather": {
+    "temperature_c": 17.6,
+    "feels_like_c": 17.3,
+    "humidity_percent": 78,
+    "pressure_hpa": 993,
+    "wind_speed_kph": 10.9,
+    "wind_direction_deg": 134,
+    "visibility_km": 10,
+    "uv_index": 2,
+    "dew_point_c": 0,
+    "cloud_cover_percent": 100,
+    "precipitation_mm": 0,
+    "snowfall_cm": 0,
+    "condition": "Overcast",
+    "alerts": [],
+    "sun": {
+      "sunrise": "2025-11-29T07:09",
+      "sunset": "2025-11-29T17:35"
+    }
+  },
+  "hazard_prediction": {
+    "city": "San Antonio",
+    "fire_risk_percent": 5,
+    "flood_risk_percent": 5,
+    "storm_risk_percent": 15,
+    "heat_wave_risk_percent": 0,
+    "snow_risk_percent": 0,
+    "explanation": ""
+  }
+}

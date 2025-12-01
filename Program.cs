@@ -12,6 +12,14 @@ builder.Services.AddHttpClient<IWeatherService, WeatherService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IHazardService, HazardService>();
 
+// Cosmos DB Registration
+builder.Services.AddSingleton<Microsoft.Azure.Cosmos.CosmosClient>(sp =>
+{
+    var configuration = sp.GetRequiredService<IConfiguration>();
+    var cosmosSettings = configuration.GetSection("Cosmos");
+    return new Microsoft.Azure.Cosmos.CosmosClient(cosmosSettings["ConnectionString"]);
+});
+
 // Notification Services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ILocalWeatherService, LocalWeatherService>();

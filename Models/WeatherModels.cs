@@ -68,7 +68,12 @@ namespace WeatherHazardApi.Models
     // --- Unified Output Models ---
     public class UnifiedWeatherResponse
     {
+        [JsonPropertyName("id")]
+        [Newtonsoft.Json.JsonProperty("id")]
+        public string Id { get; set; } = Guid.NewGuid().ToString();
+
         [JsonPropertyName("city")]
+        [Newtonsoft.Json.JsonProperty("city")]
         public string City { get; set; } = string.Empty;
 
         [JsonPropertyName("coordinates")]

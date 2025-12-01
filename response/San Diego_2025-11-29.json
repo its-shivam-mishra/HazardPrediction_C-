@@ -1,0 +1,37 @@
+{
+  "id": "d8fc2091-ab8b-413e-84ee-3f73c16e6fd0",
+  "city": "San Diego",
+  "coordinates": {
+    "lat": 32.7157,
+    "lon": -117.1611
+  },
+  "weather": {
+    "temperature_c": 12.4,
+    "feels_like_c": 11.6,
+    "humidity_percent": 92,
+    "pressure_hpa": 1013,
+    "wind_speed_kph": 7.7,
+    "wind_direction_deg": 53,
+    "visibility_km": 10,
+    "uv_index": 4,
+    "dew_point_c": 0,
+    "cloud_cover_percent": 23,
+    "precipitation_mm": 0,
+    "snowfall_cm": 0,
+    "condition": "Mainly clear",
+    "alerts": [],
+    "sun": {
+      "sunrise": "2025-11-28T06:30",
+      "sunset": "2025-11-28T16:42"
+    }
+  },
+  "hazard_prediction": {
+    "city": "San Diego",
+    "fire_risk_percent": 5,
+    "flood_risk_percent": 2,
+    "storm_risk_percent": 5,
+    "heat_wave_risk_percent": 1,
+    "snow_risk_percent": 0,
+    "explanation": ""
+  }
+}

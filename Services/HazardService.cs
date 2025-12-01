@@ -12,6 +12,8 @@ namespace WeatherHazardApi.Services
         private readonly ILogger<HazardService> _logger;
         private readonly ChatClient? _chatClient;
         private readonly string _deploymentName;
+        private readonly string _quasarEndpoint;
+        private readonly string _quasarKey;
 
         public HazardService(IConfiguration configuration, ILogger<HazardService> logger)
         {
@@ -20,6 +22,8 @@ namespace WeatherHazardApi.Services
 
             var endpoint = _configuration["AzureOpenAI:Endpoint"];
             var key = _configuration["AzureOpenAI:ApiKey"];
+            _quasarEndpoint = _configuration["Quasarmarket:Endpoint"]??"";
+            _quasarKey = _configuration["Quasarmarket:ApiKey"]??"";
             _deploymentName = _configuration["AzureOpenAI:DeploymentName"] ?? "gpt-4o-mini";
 
             if (!string.IsNullOrEmpty(endpoint) && !string.IsNullOrEmpty(key))
@@ -74,14 +78,14 @@ namespace WeatherHazardApi.Services
                                 {weatherJson}
                                 ";
 
-                ChatCompletion completion = await _chatClient.CompleteChatAsync(
-                     [
-                         new SystemChatMessage("You are a helpful assistant that outputs only JSON."),
-                         new UserChatMessage(prompt),
-                     ]);
+                //ChatCompletion completion = await _chatClient.CompleteChatAsync(
+                //     [
+                //         new SystemChatMessage("You are a helpful assistant that outputs only JSON."),
+                //         new UserChatMessage(prompt),
+                //     ]);
 
-                var responseText = completion.Content[0].Text;
-
+                // var responseText = completion.Content[0].Text;
+                var responseText = await new Quasarmarket().llmResultAsync(prompt,_quasarEndpoint,_quasarKey);
                 // Clean up markdown code blocks if present (just in case)
                 responseText = responseText.Replace("```json", "").Replace("```", "").Trim();
 

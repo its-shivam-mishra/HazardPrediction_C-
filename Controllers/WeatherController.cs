@@ -26,7 +26,7 @@ namespace WeatherHazardApi.Controllers
         }
 
         [HttpGet("fetch")]
-        public async Task<IActionResult> FetchWeather([FromQuery] int days = 15)
+        public async Task<IActionResult> FetchWeather([FromQuery] int days = 7)
         {
             _logger.LogInformation("Fetching weather for {Days} days", days);
 

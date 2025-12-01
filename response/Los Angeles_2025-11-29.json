@@ -1,0 +1,37 @@
+{
+  "id": "2a4605f8-6288-475b-906a-ae3a5172c569",
+  "city": "Los Angeles",
+  "coordinates": {
+    "lat": 34.0522,
+    "lon": -118.2437
+  },
+  "weather": {
+    "temperature_c": 14,
+    "feels_like_c": 14.3,
+    "humidity_percent": 95,
+    "pressure_hpa": 1004,
+    "wind_speed_kph": 5.4,
+    "wind_direction_deg": 90,
+    "visibility_km": 10,
+    "uv_index": 4,
+    "dew_point_c": 0,
+    "cloud_cover_percent": 100,
+    "precipitation_mm": 0,
+    "snowfall_cm": 0,
+    "condition": "Fog",
+    "alerts": [],
+    "sun": {
+      "sunrise": "2025-11-28T06:38",
+      "sunset": "2025-11-28T16:43"
+    }
+  },
+  "hazard_prediction": {
+    "city": "Los Angeles",
+    "fire_risk_percent": 2,
+    "flood_risk_percent": 1,
+    "storm_risk_percent": 3,
+    "heat_wave_risk_percent": 1,
+    "snow_risk_percent": 0,
+    "explanation": ""
+  }
+}

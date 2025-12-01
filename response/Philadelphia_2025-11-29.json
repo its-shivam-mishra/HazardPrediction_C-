@@ -1,0 +1,37 @@
+{
+  "id": "57da8853-0573-4eba-a97a-2b3c979c52f7",
+  "city": "Philadelphia",
+  "coordinates": {
+    "lat": 39.9526,
+    "lon": -75.1652
+  },
+  "weather": {
+    "temperature_c": -0.3,
+    "feels_like_c": -5.1,
+    "humidity_percent": 68,
+    "pressure_hpa": 1022,
+    "wind_speed_kph": 13.1,
+    "wind_direction_deg": 249,
+    "visibility_km": 10,
+    "uv_index": 2,
+    "dew_point_c": 0,
+    "cloud_cover_percent": 0,
+    "precipitation_mm": 0,
+    "snowfall_cm": 0,
+    "condition": "Clear sky",
+    "alerts": [],
+    "sun": {
+      "sunrise": "2025-11-29T07:01",
+      "sunset": "2025-11-29T16:36"
+    }
+  },
+  "hazard_prediction": {
+    "city": "Philadelphia",
+    "fire_risk_percent": 0,
+    "flood_risk_percent": 0,
+    "storm_risk_percent": 0,
+    "heat_wave_risk_percent": 0,
+    "snow_risk_percent": 0,
+    "explanation": ""
+  }
+}

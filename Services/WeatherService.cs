@@ -1,5 +1,5 @@
-using System.Text.Json;
 using System.Linq;
+using System.Text.Json;
 using WeatherHazardApi.Models;
 
 namespace WeatherHazardApi.Services
@@ -9,27 +9,80 @@ namespace WeatherHazardApi.Services
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
         private readonly ILogger<WeatherService> _logger;
+        private readonly IWebHostEnvironment _env;
+        private readonly List<CityInfo> _cities = new();
 
-        // Hardcoded list of US cities for demonstration
-        private readonly List<CityInfo> _cities = new()
-        {
-            new CityInfo { Name = "New York", Lat = 40.7128, Lon = -74.0060 },
-            new CityInfo { Name = "Los Angeles", Lat = 34.0522, Lon = -118.2437 },
-            new CityInfo { Name = "Chicago", Lat = 41.8781, Lon = -87.6298 },
-            new CityInfo { Name = "Houston", Lat = 29.7604, Lon = -95.3698 },
-            new CityInfo { Name = "Phoenix", Lat = 33.4484, Lon = -112.0740 },
-            new CityInfo { Name = "Philadelphia", Lat = 39.9526, Lon = -75.1652 },
-            new CityInfo { Name = "San Antonio", Lat = 29.4241, Lon = -98.4936 },
-            new CityInfo { Name = "San Diego", Lat = 32.7157, Lon = -117.1611 },
-            new CityInfo { Name = "Dallas", Lat = 32.7767, Lon = -96.7970 },
-            new CityInfo { Name = "San Jose", Lat = 37.3382, Lon = -121.8863 }
-        };
-
-        public WeatherService(HttpClient httpClient, IConfiguration configuration, ILogger<WeatherService> logger)
+        public WeatherService(HttpClient httpClient, IConfiguration configuration, ILogger<WeatherService> logger, IWebHostEnvironment env)
         {
             _httpClient = httpClient;
             _configuration = configuration;
             _logger = logger;
+            _env = env;
+
+            var useMockCities = _configuration.GetValue<bool>("UseMockCities");
+            if (useMockCities)
+            {
+                LoadMockCities();
+            }
+            else
+            {
+                LoadCitiesFromCsv();
+            }
+        }
+
+        private void LoadMockCities()
+        {
+            _cities.AddRange(new[]
+            {
+                new CityInfo { Name = "New York", Lat = 40.7128, Lon = -74.0060 },
+                new CityInfo { Name = "Los Angeles", Lat = 34.0522, Lon = -118.2437 },
+                new CityInfo { Name = "Chicago", Lat = 41.8781, Lon = -87.6298 },
+                new CityInfo { Name = "Houston", Lat = 29.7604, Lon = -95.3698 },
+                new CityInfo { Name = "Phoenix", Lat = 33.4484, Lon = -112.0740 },
+                new CityInfo { Name = "Philadelphia", Lat = 39.9526, Lon = -75.1652 },
+                new CityInfo { Name = "San Antonio", Lat = 29.4241, Lon = -98.4936 },
+                new CityInfo { Name = "San Diego", Lat = 32.7157, Lon = -117.1611 },
+                new CityInfo { Name = "Dallas", Lat = 32.7767, Lon = -96.7970 },
+                new CityInfo { Name = "San Jose", Lat = 37.3382, Lon = -121.8863 }
+            });
+            _logger.LogInformation("Loaded {Count} mock cities.", _cities.Count);
+        }
+
+        private void LoadCitiesFromCsv()
+        {
+            try
+            {
+                var filePath = Path.Combine(_env.WebRootPath, "data", "us_cities.csv");
+                if (!File.Exists(filePath))
+                {
+                    _logger.LogWarning("Cities CSV not found at {Path}. Using empty list.", filePath);
+                    return;
+                }
+
+                var lines = File.ReadAllLines(filePath);
+                // Skip header row
+                foreach (var line in lines.Skip(1))
+                {
+                    var parts = line.Split(',');
+                    if (parts.Length >= 4)
+                    {
+                        if (double.TryParse(parts[2], out double lat) && double.TryParse(parts[3], out double lon))
+                        {
+                            _cities.Add(new CityInfo
+                            {
+                                Name = parts[0].Trim(),
+                                Lat = lat,
+                                Lon = lon
+                            });
+                        }
+                    }
+                }
+                _logger.LogInformation("Loaded {Count} cities from CSV.", _cities.Count);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error loading cities from CSV.");
+            }
         }
 
         public async Task<List<UnifiedWeatherResponse>> FetchWeatherForAllCitiesAsync(int days)
@@ -99,7 +152,7 @@ namespace WeatherHazardApi.Services
                     PressureHpa = (int)(current?.surface_pressure ?? 0),
                     WindSpeedKph = current?.wind_speed_10m ?? 0,
                     WindDirectionDeg = current?.wind_direction_10m ?? 0,
-                    VisibilityKm = 10, 
+                    VisibilityKm = 10,
                     UvIndex = (int)(daily?.uv_index_max?.FirstOrDefault() ?? 0),
                     DewPointC = 0, // Not requested
                     CloudCoverPercent = (int)(current?.cloud_cover ?? 0),
