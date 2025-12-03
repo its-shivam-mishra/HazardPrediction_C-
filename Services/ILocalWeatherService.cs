@@ -6,5 +6,6 @@ namespace WeatherHazardApi.Services
     {
         Task<(List<string> Hazards, string PredictionId)> GetHazardsForCityAsync(string city);
         Task<List<UnifiedWeatherResponse>> GetActiveHazardsAsync();
+        Task<UnifiedWeatherResponse?> GetWeatherRecordAsync(string id, string city);
     }
 }

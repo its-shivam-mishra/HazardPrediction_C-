@@ -27,11 +27,11 @@
   },
   "hazard_prediction": {
     "city": "Chicago",
-    "fire_risk_percent": 5,
-    "flood_risk_percent": 5,
-    "storm_risk_percent": 10,
+    "fire_risk_percent": 0,
+    "flood_risk_percent": 0,
+    "storm_risk_percent": 0,
     "heat_wave_risk_percent": 0,
-    "snow_risk_percent": 20,
+    "snow_risk_percent": 0,
     "explanation": ""
   }
 }

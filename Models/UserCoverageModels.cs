@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+
 namespace WeatherHazardApi.Models
 {
     public class User
@@ -29,10 +32,27 @@ namespace WeatherHazardApi.Models
         public string City { get; set; } = string.Empty;
     }
 
+    public class CityHazardGroup
+    {
+        public string City { get; set; } = string.Empty;
+        public string PredictionId { get; set; } = string.Empty;
+        public WeatherHazardApi.Models.HazardPrediction HazardPrediction { get; set; } = new();
+        public List<UserViewModel> Users { get; set; } = new();
+        public bool IsSelected { get; set; } = true;
+    }
+
     public class NotificationViewModel
     {
-        public List<UserViewModel> Users { get; set; } = new();
+        public List<CityHazardGroup> CityGroups { get; set; } = new();
         public string EmailSubject { get; set; } = string.Empty;
         public string EmailBodyHtml { get; set; } = string.Empty;
+        
+        public List<UserViewModel> Users 
+        { 
+            get 
+            {
+                return CityGroups.SelectMany(g => g.Users).ToList();
+            }
+        }
     }
 }

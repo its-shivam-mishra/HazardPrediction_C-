@@ -106,7 +106,67 @@ namespace WeatherHazardApi.Services
                 _logger.LogError(ex, "Error fetching active hazards from Cosmos DB.");
             }
 
+            // DEBUG: Check raw JSON stream
+            try
+            {
+                Console.WriteLine("DEBUG BLOCK REACHED");
+                var dbId = _configuration["Cosmos:DatabaseId"];
+                var contId = _configuration["Cosmos:ContainerId"];
+                if (!string.IsNullOrEmpty(dbId) && !string.IsNullOrEmpty(contId))
+                {
+                    var container = _cosmosClient.GetContainer(dbId, contId);
+                    var debugQuery = new QueryDefinition("SELECT TOP 1 * FROM c");
+                    using var debugIterator = container.GetItemQueryStreamIterator(debugQuery);
+                    if (debugIterator.HasMoreResults)
+                    {
+                        using var response = await debugIterator.ReadNextAsync();
+                        if (response.StatusCode == System.Net.HttpStatusCode.OK && response.Content != null)
+                        {
+                            using var reader = new StreamReader(response.Content);
+                            var json = await reader.ReadToEndAsync();
+                            _logger.LogInformation($"DEBUG RAW STREAM: {json}");
+                            Console.WriteLine($"DEBUG RAW STREAM CONSOLE: {json}");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex) { _logger.LogError($"Debug stream query failed: {ex.Message}"); }
+
             return activeHazards;
+        }
+
+        public async Task<UnifiedWeatherResponse?> GetWeatherRecordAsync(string id, string city)
+        {
+            try
+            {
+                Console.WriteLine($"DEBUG: GetWeatherRecordAsync called for Id: {id}, City: {city}");
+                var databaseId = _configuration["Cosmos:DatabaseId"];
+                var containerId = _configuration["Cosmos:ContainerId"];
+
+                if (!string.IsNullOrEmpty(databaseId) && !string.IsNullOrEmpty(containerId))
+                {
+                    var container = _cosmosClient.GetContainer(databaseId, containerId);
+
+                    // Use Query instead of ReadItemAsync to avoid potential PartitionKey issues
+                    var query = new QueryDefinition("SELECT * FROM c WHERE c.id = @id")
+                        .WithParameter("@id", id);
+
+                    using var iterator = container.GetItemQueryIterator<UnifiedWeatherResponse>(query);
+                    if (iterator.HasMoreResults)
+                    {
+                        var response = await iterator.ReadNextAsync();
+                        var weatherRecord = response.FirstOrDefault();
+                        Console.WriteLine($"DEBUG: GetWeatherRecordAsync success. Found: {weatherRecord != null}");
+                        return weatherRecord;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching weather record {Id} for {City}", id, city);
+                Console.WriteLine($"DEBUG: GetWeatherRecordAsync Error: {ex.Message}");
+            }
+            return null;
         }
     }
 }

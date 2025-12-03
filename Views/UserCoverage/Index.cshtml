@@ -15,92 +15,164 @@
         </div>
     }
 
-    <form asp-action="SendNotifications" method="post">
-        <div class="card mb-4">
-            <div class="card-header">
-                <i class="fas fa-users-cog me-2"></i>At Risk Users
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th style="width: 50px;">Select</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Missing Coverage</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (int i = 0; i < Model.Users.Count; i++)
-                            {
-                                <tr>
-                                    <td class="text-center">
-                                        <div class="form-check d-flex justify-content-center">
-                                            <input class="form-check-input" type="checkbox" asp-for="Users[i].IsSelected" />
-                                        </div>
-                                        <input type="hidden" asp-for="Users[i].Id" />
-                                        <input type="hidden" asp-for="Users[i].Name" />
-                                        <input type="hidden" asp-for="Users[i].Email" />
-                                        <input type="hidden" asp-for="Users[i].MissingCoverage" />
-                                        <input type="hidden" asp-for="Users[i].PredictionId" />
-                                        <input type="hidden" asp-for="Users[i].City" />
-                                    </td>
-                                    <td><i class="fas fa-user-circle text-secondary me-2"></i>@Model.Users[i].Name</td>
-                                    <td>@Model.Users[i].Email</td>
-                                    <td>
-                                        @foreach(var coverage in Model.Users[i].MissingCoverage.Split(','))
-                                        {
-                                            <span class="badge bg-danger me-1"><i class="fas fa-exclamation-triangle me-1"></i>@coverage.Trim()</span>
-                                        }
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+    <form asp-action="SendNotifications" method="post" id="notificationForm">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="mb-0 text-primary"><i class="fas fa-users-cog me-2"></i>Affected Users by City</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th style="width: 40px;"></th> <!-- Expand Icon -->
+                                        <th style="width: 40px;">
+                                            <input type="checkbox" class="form-check-input" id="selectAllGlobal" />
+                                        </th>
+                                        <th>City</th>
+                                        <th>Hazards</th>
+                                        <th>Affected Users</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < Model.CityGroups.Count; i++)
+                                    {
+                                        var group = Model.CityGroups[i];
+                                        <tr class="align-middle table-secondary">
+                                            <td>
+                                                <button type="button" class="btn btn-sm btn-link text-decoration-none p-0" data-bs-toggle="collapse" data-bs-target="#collapse-@i">
+                                                    <i class="fas fa-chevron-right transition-icon"></i>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" asp-for="CityGroups[i].IsSelected" class="form-check-input city-checkbox" data-group-index="@i" />
+                                                <input type="hidden" asp-for="CityGroups[i].City" />
+                                                <input type="hidden" asp-for="CityGroups[i].PredictionId" />
+                                            </td>
+                                            <td class="fw-bold">@group.City</td>
+                                            <td>
+                                                @if (group.HazardPrediction.FireRiskPercent > 20) { <span class="badge bg-danger me-1">Fire (@group.HazardPrediction.FireRiskPercent%)</span> }
+                                                @if (group.HazardPrediction.FloodRiskPercent > 20) { <span class="badge bg-primary me-1">Flood (@group.HazardPrediction.FloodRiskPercent%)</span> }
+                                                @if (group.HazardPrediction.StormRiskPercent > 20) { <span class="badge bg-dark me-1">Storm (@group.HazardPrediction.StormRiskPercent%)</span> }
+                                                @if (group.HazardPrediction.HeatWaveRiskPercent > 20) { <span class="badge bg-warning text-dark me-1">Heat (@group.HazardPrediction.HeatWaveRiskPercent%)</span> }
+                                                @if (group.HazardPrediction.SnowRiskPercent > 20) { <span class="badge bg-info text-dark me-1">Snow (@group.HazardPrediction.SnowRiskPercent%)</span> }
+                                            </td>
+                                            <td><span class="badge bg-secondary">@group.Users.Count</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5" class="p-0 border-0">
+                                                <div class="collapse show" id="collapse-@i">
+                                                    <div class="p-3 bg-light border-bottom">
+                                                        <table class="table table-sm table-borderless mb-0">
+                                                            <thead>
+                                                                <tr class="text-muted small">
+                                                                    <th style="width: 40px;"></th>
+                                                                    <th>Name</th>
+                                                                    <th>Email</th>
+                                                                    <th>Missing Coverage</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @for (int j = 0; j < group.Users.Count; j++)
+                                                                {
+                                                                    <tr>
+                                                                        <td>
+                                                                            <input type="checkbox" asp-for="CityGroups[i].Users[j].IsSelected" class="form-check-input user-checkbox group-@i" data-group-index="@i" />
+                                                                            <input type="hidden" asp-for="CityGroups[i].Users[j].Id" />
+                                                                            <input type="hidden" asp-for="CityGroups[i].Users[j].Name" />
+                                                                            <input type="hidden" asp-for="CityGroups[i].Users[j].Email" />
+                                                                            <input type="hidden" asp-for="CityGroups[i].Users[j].City" />
+                                                                            <input type="hidden" asp-for="CityGroups[i].Users[j].MissingCoverage" />
+                                                                            <input type="hidden" asp-for="CityGroups[i].Users[j].PredictionId" />
+                                                                        </td>
+                                                                        <td>@Model.CityGroups[i].Users[j].Name</td>
+                                                                        <td>@Model.CityGroups[i].Users[j].Email</td>
+                                                                        <td><span class="text-danger">@Model.CityGroups[i].Users[j].MissingCoverage</span></td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="card mb-4">
-            <div class="card-header">
-                <i class="fas fa-envelope-open-text me-2"></i>Email Content
-            </div>
-            <div class="card-body">
-                <div class="form-group mb-3">
-                    <label asp-for="EmailSubject" class="form-label fw-bold">Subject</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-heading"></i></span>
-                        <input asp-for="EmailSubject" class="form-control" />
+            <div class="col-md-4">
+                <div class="card shadow-sm sticky-top" style="top: 20px;">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="mb-0 text-primary"><i class="fas fa-paper-plane me-2"></i>Compose Notification</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="EmailSubject" class="form-label fw-bold">Subject</label>
+                            <input asp-for="EmailSubject" class="form-control" placeholder="Enter email subject..." />
+                            <span asp-validation-for="EmailSubject" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="EmailBodyHtml" class="form-label fw-bold">Message Body (HTML)</label>
+                            <textarea asp-for="EmailBodyHtml" class="form-control" rows="6" placeholder="Enter email content..."></textarea>
+                            <span asp-validation-for="EmailBodyHtml" class="text-danger"></span>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-paper-plane me-2"></i>Approve & Send
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group mb-3">
-                    <label asp-for="EmailBodyHtml" class="form-label fw-bold">Body</label>
-                    <input type="hidden" asp-for="EmailBodyHtml" id="EmailBodyHtml" />
-                    <div id="editor-container" style="height: 200px; border-radius: 0 0 8px 8px;">
-                        @Html.Raw(Model.EmailBodyHtml)
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary btn-lg w-100">
-                    <i class="fas fa-paper-plane me-2"></i>Approve & Send Notifications
-                </button>
             </div>
         </div>
     </form>
 </div>
 
 @section Scripts {
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-
     <script>
-        var quill = new Quill('#editor-container', {
-            theme: 'snow'
-        });
+        $(document).ready(function () {
+            // Toggle icon rotation
+            $('[data-bs-toggle="collapse"]').click(function () {
+                $(this).find('i').toggleClass('fa-chevron-right fa-chevron-down');
+            });
 
-        document.querySelector('form').onsubmit = function () {
-            var html = document.querySelector('.ql-editor').innerHTML;
-            document.querySelector('#EmailBodyHtml').value = html;
-        };
+            // City Checkbox Logic
+            $('.city-checkbox').change(function () {
+                var groupIndex = $(this).data('group-index');
+                var isChecked = $(this).is(':checked');
+                $('.user-checkbox.group-' + groupIndex).prop('checked', isChecked);
+            });
+
+            // User Checkbox Logic
+            $('.user-checkbox').change(function () {
+                var groupIndex = $(this).data('group-index');
+                var allChecked = $('.user-checkbox.group-' + groupIndex).length === $('.user-checkbox.group-' + groupIndex + ':checked').length;
+                var anyChecked = $('.user-checkbox.group-' + groupIndex + ':checked').length > 0;
+                
+                var cityCheckbox = $('.city-checkbox[data-group-index="' + groupIndex + '"]');
+                cityCheckbox.prop('checked', allChecked);
+                cityCheckbox.prop('indeterminate', anyChecked && !allChecked);
+            });
+
+            // Global Select All
+            $('#selectAllGlobal').change(function() {
+                var isChecked = $(this).is(':checked');
+                $('.city-checkbox').prop('checked', isChecked).trigger('change');
+            });
+        });
     </script>
+    <style>
+        .transition-icon {
+            transition: transform 0.2s;
+        }
+        .fa-chevron-down {
+            transform: rotate(90deg);
+        }
+    </style>
 }

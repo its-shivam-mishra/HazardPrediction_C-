@@ -23,7 +23,7 @@ namespace WeatherHazardApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(string? subject = null, string? body = null, string? notificationId = null, string? city = null)
         {
-            var atRiskUsers = await _notificationService.GetAtRiskUsersAsync();
+            var cityGroups = await _notificationService.GetAtRiskUsersAsync();
 
             // If Resend (notificationId provided), filter users to the original list
             if (!string.IsNullOrEmpty(notificationId) && !string.IsNullOrEmpty(city))
@@ -40,21 +40,57 @@ namespace WeatherHazardApi.Controllers
 
                         if (log != null)
                         {
-                            // Filter users
-                            atRiskUsers = atRiskUsers.Where(u => log.UserIds.Contains(u.Id)).ToList();
+                            Console.WriteLine($"DEBUG: Log found. PredictionId: {log.PredictionId}, LogCity: {log.City}, UserIds Count: {log.UserIds?.Count}");
 
-                            // Ensure subject/body are from log (though params should handle it)
+                            // Fetch the historical hazard group for this prediction
+                            if (!string.IsNullOrEmpty(log.PredictionId))
+                            {
+                                var targetCities = (log.Cities != null && log.Cities.Any()) ? log.Cities : new List<string> { log.City };
+                                cityGroups = new List<CityHazardGroup>();
+
+                                foreach (var targetCity in targetCities)
+                                {
+                                    if (targetCity == "Multiple") continue;
+
+                                    Console.WriteLine($"DEBUG: Processing Resend for City: {targetCity}");
+                                    var resendGroup = await _notificationService.GetCityHazardGroupForResendAsync(log.PredictionId, targetCity);
+
+                                    if (resendGroup != null)
+                                    {
+                                        Console.WriteLine($"DEBUG: ResendGroup found for {targetCity}. Users found: {resendGroup.Users.Count}");
+
+                                        // Filter users within the group to match the original log
+                                        var userIds = log.UserIds ?? new List<int>();
+                                        resendGroup.Users = resendGroup.Users.Where(u => userIds.Contains(u.Id)).ToList();
+                                        Console.WriteLine($"DEBUG: Users after filtering by log.UserIds: {resendGroup.Users.Count}");
+
+                                        if (resendGroup.Users.Any())
+                                        {
+                                            cityGroups.Add(resendGroup);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine($"DEBUG: ResendGroup is NULL for {targetCity}.");
+                                    }
+                                }
+                            }
+
+                            // Ensure subject/body are from log
                             subject = log.EmailSubject;
                             body = log.EmailBodyHtml;
                         }
                     }
-                    catch { /* Log not found or error, show all users */ }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"DEBUG: Error in Resend logic: {ex.Message}");
+                    }
                 }
             }
 
             var viewModel = new NotificationViewModel
             {
-                Users = atRiskUsers,
+                CityGroups = cityGroups,
                 EmailSubject = subject ?? "Urgent: Weather Hazard Alert",
                 EmailBodyHtml = body ?? "<p>Warning: We detected a fire risk in your area, and you do not have Fire Coverage.</p>"
             };
@@ -65,9 +101,10 @@ namespace WeatherHazardApi.Controllers
         [HttpPost]
         public async Task<IActionResult> SendNotifications(NotificationViewModel model)
         {
-            if (model.Users != null)
+            if (model.CityGroups != null && model.CityGroups.Any())
             {
-                var selectedUsers = model.Users.Where(u => u.IsSelected).ToList();
+                // Flatten to get selected users
+                var selectedUsers = model.CityGroups.SelectMany(g => g.Users).Where(u => u.IsSelected).ToList();
 
                 // 1. Send Emails
                 foreach (var user in selectedUsers)

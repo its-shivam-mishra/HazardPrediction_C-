@@ -69,39 +69,30 @@ namespace WeatherHazardApi.Models
     // --- Unified Output Models ---
     public class UnifiedWeatherResponse
     {
-        [JsonPropertyName("id")]
         [JsonProperty("id")]
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
-        [JsonPropertyName("city")]
         [JsonProperty("city")]
         public string City { get; set; } = string.Empty;
 
-        [JsonPropertyName("coordinates")]
         [JsonProperty("coordinates")]
         public Coordinates Coordinates { get; set; } = new();
 
-        [JsonPropertyName("weather")]
         [JsonProperty("weather")]
         public WeatherDetails Weather { get; set; } = new();
 
-        [JsonPropertyName("hazard_prediction")]
-        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonProperty("HazardPrediction")]
         public HazardPrediction? HazardPrediction { get; set; }
 
-        [JsonPropertyName("isNotificationSent")]
         [JsonProperty("isNotificationSent")]
         public bool IsNotificationSent { get; set; }
 
-        [JsonPropertyName("notificationSentDate")]
         [JsonProperty("notificationSentDate")]
         public DateTime? NotificationSentDate { get; set; }
 
-        [JsonPropertyName("predictionGeneratedDate")]
         [JsonProperty("predictionGeneratedDate")]
         public DateTime PredictionGeneratedDate { get; set; } = DateTime.UtcNow;
 
-        [JsonPropertyName("Type")]
         [JsonProperty("Type")]
         public string Type { get; set; } = "Weather";
     }
@@ -194,25 +185,25 @@ namespace WeatherHazardApi.Models
     // --- Hazard Prediction Models ---
     public class HazardPrediction
     {
-        [JsonPropertyName("city")]
+        [JsonProperty("City")]
         public string City { get; set; } = string.Empty;
 
-        [JsonPropertyName("fire_risk_percent")]
+        [JsonProperty("FireRiskPercent")]
         public int FireRiskPercent { get; set; }
 
-        [JsonPropertyName("flood_risk_percent")]
+        [JsonProperty("FloodRiskPercent")]
         public int FloodRiskPercent { get; set; }
 
-        [JsonPropertyName("storm_risk_percent")]
+        [JsonProperty("StormRiskPercent")]
         public int StormRiskPercent { get; set; }
 
-        [JsonPropertyName("heat_wave_risk_percent")]
+        [JsonProperty("HeatWaveRiskPercent")]
         public int HeatWaveRiskPercent { get; set; }
 
-        [JsonPropertyName("snow_risk_percent")]
+        [JsonProperty("SnowRiskPercent")]
         public int SnowRiskPercent { get; set; }
 
-        [JsonPropertyName("explanation")]
+        [JsonProperty("Explanation")]
         public string Explanation { get; set; } = string.Empty;
     }
 }
