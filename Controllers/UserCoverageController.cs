@@ -76,9 +76,9 @@ namespace WeatherHazardApi.Controllers
                                 }
                             }
 
-                            // Ensure subject/body are from log
-                            subject = log.EmailSubject;
-                            body = log.EmailBodyHtml;
+                            // Ensure subject/body are from log ONLY if not provided in args
+                            if (string.IsNullOrEmpty(subject)) subject = log.EmailSubject;
+                            if (string.IsNullOrEmpty(body)) body = log.EmailBodyHtml;
                         }
                     }
                     catch (Exception ex)
@@ -193,9 +193,9 @@ namespace WeatherHazardApi.Controllers
             }
 
             TempData["Message"] = "Notifications sent successfully!";
-            // return RedirectToAction("Index");
+            return RedirectToAction("Index");
 
-            return RedirectToAction("SentHistory");
+            // return RedirectToAction("SentHistory");
         }
 
         [HttpGet]
