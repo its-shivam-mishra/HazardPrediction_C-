@@ -43,7 +43,7 @@
                                         <tr class="align-middle table-secondary">
                                             <td>
                                                 <button type="button" class="btn btn-sm btn-link text-decoration-none p-0" data-bs-toggle="collapse" data-bs-target="#collapse-@i">
-                                                    <i class="fas fa-chevron-right transition-icon"></i>
+                                                    <i class="fas fa-minus transition-icon"></i>
                                                 </button>
                                             </td>
                                             <td>
@@ -139,7 +139,7 @@
         $(document).ready(function () {
             // Toggle icon rotation
             $('[data-bs-toggle="collapse"]').click(function () {
-                $(this).find('i').toggleClass('fa-chevron-plus fa-chevron-down');
+                $(this).find('i').toggleClass('fa-minus fa-plus');
             });
 
             // City Checkbox Logic
@@ -170,9 +170,6 @@
     <style>
         .transition-icon {
             transition: transform 0.2s;
-        }
-        .fa-chevron-down {
-            transform: rotate(90deg);
         }
     </style>
 }
