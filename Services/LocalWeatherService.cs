@@ -93,12 +93,10 @@ namespace WeatherHazardApi.Services
                         allResults.AddRange(response);
                     }
 
-                    // Group by City and take the latest one
+                    // Return all unsent records, ordered by date (newest first)
                     activeHazards = allResults
-                        .GroupBy(w => w.City)
-                        .Select(g => g.OrderByDescending(w => w.PredictionGeneratedDate).FirstOrDefault())
-                        .Where(w => w != null)
-                        .ToList()!;
+                        .OrderByDescending(w => w.PredictionGeneratedDate)
+                        .ToList();
                 }
             }
             catch (Exception ex)

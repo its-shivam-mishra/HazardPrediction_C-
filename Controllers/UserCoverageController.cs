@@ -92,7 +92,7 @@ namespace WeatherHazardApi.Controllers
             {
                 CityGroups = cityGroups,
                 EmailSubject = subject ?? "Urgent: Weather Hazard Alert",
-                EmailBodyHtml = body ?? "<p>Warning: We detected a fire risk in your area, and you do not have Fire Coverage.</p>"
+                EmailBodyHtml = body ?? "Warning: We detected a risk in your area."
             };
 
             return View(viewModel);
