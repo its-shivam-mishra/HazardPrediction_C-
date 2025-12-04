@@ -152,16 +152,23 @@ namespace WeatherHazardApi.Controllers
                 if (!string.IsNullOrEmpty(databaseId) && !string.IsNullOrEmpty(containerId))
                 {
                     var container = _cosmosClient.GetContainer(databaseId, containerId);
+                    
+                    // Group selected users by PredictionId and City to ensure we only update records 
+                    // where at least one user from that city was selected.
                     var distinctPredictions = selectedUsers
                         .Where(u => !string.IsNullOrEmpty(u.PredictionId) && !string.IsNullOrEmpty(u.City))
                         .GroupBy(u => new { u.PredictionId, u.City })
                         .Select(g => g.Key)
                         .ToList();
 
+                    Console.WriteLine($"DEBUG: Updating {distinctPredictions.Count} weather records as sent.");
+
                     foreach (var item in distinctPredictions)
                     {
                         try
                         {
+                            Console.WriteLine($"DEBUG: Marking weather record as sent for PredictionId: {item.PredictionId}, City: {item.City}");
+
                             // Fetch the weather record
                             ItemResponse<UnifiedWeatherResponse> response = await container.ReadItemAsync<UnifiedWeatherResponse>(item.PredictionId, new PartitionKey(item.City));
                             var weatherRecord = response.Resource;
@@ -174,11 +181,12 @@ namespace WeatherHazardApi.Controllers
 
                                 // Save back
                                 await container.UpsertItemAsync(weatherRecord, new PartitionKey(item.City));
+                                Console.WriteLine($"DEBUG: Successfully updated weather record for {item.City}");
                             }
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine($"Error updating weather record {item.PredictionId}: {ex.Message}");
+                            Console.WriteLine($"Error updating weather record {item.PredictionId} for city {item.City}: {ex.Message}");
                         }
                     }
                 }
